@@ -4758,5 +4758,40 @@ gpUpdateCount();
 
 
 
+
+<script id="video-stop-patch">
+function stopAllVideos(){
+  document.querySelectorAll('video').forEach(v=>{
+    try{ v.pause(); }catch(e){}
+  });
+
+  document.querySelectorAll('iframe').forEach(frame=>{
+    try{
+      const src = frame.src;
+      frame.src = '';
+      frame.src = src;
+    }catch(e){}
+  });
+}
+
+window.addEventListener('load', ()=>{
+  if(typeof openDetail === 'function'){
+    const _openDetail = openDetail;
+    openDetail = function(...args){
+      stopAllVideos();
+      return _openDetail.apply(this,args);
+    }
+  }
+
+  if(typeof goBack === 'function'){
+    const _goBack = goBack;
+    goBack = function(...args){
+      stopAllVideos();
+      return _goBack.apply(this,args);
+    }
+  }
+});
+</script>
+
 </body>
 </html>
